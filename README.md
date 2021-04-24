@@ -21,24 +21,29 @@ This set of scripts, not a module, provides the user with a rough, but runnable,
 ### Register the scheduled tasks
 
 From the script directory:
-`.\Register-WSL2-Backup.ps1`
+- `.\Register-WSL2-Backup.ps1`
+
+#### Notes
+
+- The default convention is to configure the `wsl --export ...` as the current user who runs the above script (eg: `$env:USERDOMAIN\$env:USERNAME`); however, given enough permissions, it can be configured to run as any other user.  
+- The default convention is to configure the location of the resulting backups from the `wsl --export ...` command to a subdirectory of the current user who ran the script (eg: `$env:USERPROFILE\backup`)
 
 ### Verify the registered tasks
 
 From the script directory:
-`.\Get-Scheduled-WSL2-Backups.ps1`
+- `.\Get-Scheduled-WSL2-Backups.ps1`
 
 ### Unregister the scheduled tasks
 
 From the script directory:
-`.\Unregister-WSL2-Backup.ps1`
+- `.\Unregister-WSL2-Backup.ps1`
 
 ### Run the backup script
 
 From the script directory:
-`.\WSL2-Backup.ps1`
+- `.\WSL2-Backup.ps1`
 
 ### Restart the docker suite
 
 From the script directory:
-`.\Restart-Docker.ps1`
+- `.\Restart-Docker.ps1`
