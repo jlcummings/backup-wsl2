@@ -14,6 +14,7 @@ param(
     [ValidateNotNullOrEmpty()][string]$destination = "$env:USERPROFILE\backup",
     [ValidateNotNullOrEmpty()][string]$distribution = 'Ubuntu',
     [ValidateNotNullOrEmpty()][string]$scheduledTime = "1am",
+    [ValidateNotNullOrEmpty()][System.DayOfWeek]$dayOfWeek = 'Sunday',
     [ValidateNotNullOrEmpty()][timespan]$timeLimit = (New-TimeSpan -Hours 6),
     [ValidateNotNullOrEmpty()][string]$executor = 'powershell',
     [ValidateNotNullOrEmpty()][string]$taskNameFormatString = "{0} {1} backup",
@@ -35,8 +36,7 @@ $cmdExecutor = (Get-Command $executor).Definition
 $principle = New-ScheduledTaskPrincipal -UserId $sanitizedUser -LogonType  ServiceAccount
 $action = New-ScheduledTaskAction -Execute $cmdExecutor -Argument $command -WorkingDirectory $sanitizedDestination
 $settingsSet = New-ScheduledTaskSettingsSet -ExecutionTimeLimit $timeLimit -WakeToRun -StartWhenAvailable
-$trigger = New-ScheduledTaskTrigger -Daily -At $scheduledTime
-
+$trigger = New-ScheduledTaskTrigger -Weekly -WeeksInterval 1 -DaysOfWeek $dayOfWeek -At $scheduledTime
 
 Register-ScheduledTask -Action $action -Trigger $trigger -TaskPath $taskFolder -TaskName $taskName -Description $taskDescription -Principal $principle -Settings $settingsSet
 
