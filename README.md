@@ -21,18 +21,24 @@ This set of scripts, not a module, provides the user with a rough, but runnable,
 ### Register the scheduled tasks
 
 From the script directory:
-1.  .\Register-WSL2-Backup.ps1
+`.\Register-WSL2-Backup.ps1`
 
 ### Verify the registered tasks
 
 From the script directory:
-1. .\Get-Scheduled-WSL2-Backups.ps1
+`.\Get-Scheduled-WSL2-Backups.ps1`
 
 ### Unregister the scheduled tasks
 
 From the script directory:
-1.  .\Unregister-WSL2-Backup.ps1
+`.\Unregister-WSL2-Backup.ps1`
 
 ### Run the backup script
 
+From the script directory:
+`.\WSL2-Backup.ps1`
+
 ### Restart the docker suite
+
+From the script directory:
+`.\Restart-Docker.ps1`
