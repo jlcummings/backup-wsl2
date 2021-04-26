@@ -1,13 +1,16 @@
 ﻿<#
 .SYNOPSIS
-The script unregisters a scheduled task to perform a WSL backup with the Windows Task Scheduler. 
+The script deregisters a scheduled task to perform a WSL backup with the Windows Task Scheduler. 
 .DESCRIPTION
-The script unregisters a scheduled task to perform a WSL backup with the Windows Task Scheduler. 
+The script deregisters a scheduled task to perform a WSL backup with the Windows Task Scheduler. 
+The naming convention for the script follows the spelling suggestion correction for 'unregister'. 
+However, the powershell module that actually performs the removal of the tasks either follows a
+different dictionary, or ignores suggested spelling for that activity.
 .EXAMPLE
 # remove a task that is targetting a default distribution called 'Ubuntu'
-.\UnregisterWSLBackup.ps1
+.\Deregister-WSL2-Backup.ps1
 .EXAMPLE
-.\UnregisterWSLBackup.ps1 -distribution fedora
+.\Deregister-WSL2-Backup.ps1 -distribution fedora
 #>
 
 param(
