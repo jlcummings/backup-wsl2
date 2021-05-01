@@ -4,33 +4,28 @@ This script registers a scheduled task to perform a backup of a particular WSL2 
 .DESCRIPTION
 This script registers a scheduled task to perform a backup of a particular WSL2 distribution.
 .EXAMPLE
-.\RegisterWSLBackup.ps1 -startIn D:\backups\wsl -distribution Ubuntu -scheduledTime 2:30am -timeLimit (New-TimeSpan -Hours 4) -executor powershell
+.\Register-WSL2-Backup.ps1 -destination D:\backups\wsl -distribution Ubuntu -dayOfWeek Tuesday -scheduledTime 2:30am -timeLimit (New-TimeSpan -Hours 4)
 .EXAMPLE
-.\RegisterWSLBackup.ps1 -distribution Ubuntu
+.\Register-WSL2-Backup.ps1 -distribution Ubuntu
 #>
 
 param(
     [ValidateNotNullOrEmpty()][string]$user = "$env:USERDOMAIN\$env:USERNAME",
     [ValidateNotNullOrEmpty()][string]$destination = "$env:USERPROFILE\backup",
     [ValidateNotNullOrEmpty()][string]$distribution = 'Ubuntu',
-    [ValidateNotNullOrEmpty()][string]$scheduledTime = "1am",
+    [ValidateNotNullOrEmpty()][string]$scheduledTime = '1am',
     [ValidateNotNullOrEmpty()][System.DayOfWeek]$dayOfWeek = 'Sunday',
     [ValidateNotNullOrEmpty()][timespan]$timeLimit = (New-TimeSpan -Hours 6),
-    [ValidateNotNullOrEmpty()][string]$executor = 'powershell',
-    [ValidateNotNullOrEmpty()][string]$taskNameFormatString = "{0} {1} backup",
-    [ValidateNotNullOrEmpty()][string]$taskDescriptionFormatString = "{0} archived at or about {1}",
-    [string]$taskNamePrefix = "WSL2",
-    [string]$taskFolder = "Custom Maintenance"
+    [string]$taskFolder = 'Custom Maintenance'
 )
 $sanitizedUser = [regex]::Escape($user)
 $sanitizedDestination = [regex]::Escape($destination)
 
-
-$taskName = $taskNameFormatString -f $taskNamePrefix, $distribution
-$taskDescription = $taskDescriptionFormatString -f $taskName, $scheduledTime
+$taskName = "WSL2 $distribution backup"
+$taskDescription = "$taskName archived at or about $scheduledTime"
 
 $command = "-NoProfile -file $PSScriptRoot\WSL2-Backup.ps1 -distribution $distribution -destination $sanitizedDestination"
-$cmdExecutor = (Get-Command $executor).Definition
+$cmdExecutor = (Get-Command 'powershell').Definition
 
 
 $principle = New-ScheduledTaskPrincipal -UserId $sanitizedUser -LogonType  ServiceAccount
@@ -61,4 +56,4 @@ $subscription = @"
 "@
 $dockerRestartTrigger.Subscription = $subscription
 
-Register-ScheduledTask -Action $dockerRestartAction -Trigger $dockerRestartTrigger -TaskPath $taskFolder -TaskName "Restart Docker" -Description "Restart Docker on completion of '$taskName'" -Principal $dockerRestartPrinciple -Settings $dockerRestartSettings
+Register-ScheduledTask -Action $dockerRestartAction -Trigger $dockerRestartTrigger -TaskPath $taskFolder -TaskName 'Restart Docker' -Description "Restart Docker on completion of '$taskName'" -Principal $dockerRestartPrinciple -Settings $dockerRestartSettings
