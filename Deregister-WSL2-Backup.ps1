@@ -1,8 +1,9 @@
 ﻿<#
 .SYNOPSIS
-The script deregisters a scheduled task to perform a WSL backup with the Windows Task Scheduler. 
+The script deregisters a WSL backup a scheduled task for a given distribution. 
 .DESCRIPTION
-The script deregisters a scheduled task to perform a WSL backup with the Windows Task Scheduler. 
+The script deregisters a WSL backup a scheduled task for a given distribution.  The default 
+distribution is "Ubuntu".
 The naming convention for the script follows the spelling suggestion correction for 'unregister'. 
 However, the powershell module that actually performs the removal of the tasks either follows a
 different dictionary, or ignores suggested spelling for that activity.
@@ -14,14 +15,12 @@ different dictionary, or ignores suggested spelling for that activity.
 #>
 
 param(
-    [ValidateNotNullOrEmpty()][string]$distribution = 'Ubuntu',
-    [string]$taskNamePrefix = "WSL2",
-    [ValidateNotNullOrEmpty()][string]$taskNameFormatString = "{0} {1} backup"
-
+    [ValidateNotNullOrEmpty()]
+    [string]$distribution = 'Ubuntu'
 )
 
 
-$taskName = $taskNameFormatString -f $taskNamePrefix, $distribution
+$taskName = "WSL2 $distribution backup"
 
 try {
     Unregister-ScheduledTask -TaskName $taskName
@@ -31,8 +30,8 @@ catch {
 }
 
 try {
-    Unregister-ScheduledTask -TaskName "Restart Docker"
+    Unregister-ScheduledTask -TaskName 'Restart Docker'
 }
 catch {
-    Write-Output "Unable to remove any tasks named Restart Docker"
+    Write-Output 'Unable to remove any tasks named Restart Docker'
 }
