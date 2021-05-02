@@ -8,7 +8,7 @@ function Log {
         [string]$LogLevel = 'Information'
     )
 
-    $timestamp = $(Get-Date -Format FileDateTime)
+    $timestamp = $(Get-Date -Format "HH:mm:ss")
     $logMessageFormatted = "$timestamp - $Message"
 
     switch ($LogLevel) {
