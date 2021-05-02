@@ -19,7 +19,7 @@ function Log {
             Write-Warning -Message $logMessageFormatted
         }
         'Information' { 
-            Write-Information -MessageData $logMessageFormatted -Tags @($serviceIdentifier, "Restart-Suite")
+            Write-Information -MessageData $logMessageFormatted
         }
         'Verbose' { 
             Write-Verbose -Message $logMessageFormatted
