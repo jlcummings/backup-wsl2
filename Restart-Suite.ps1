@@ -4,9 +4,6 @@ This script restarts an application suite
 .DESCRIPTION
 This script restarts an application suite and by convention, docker is the suite the script was first designed and is targeted to.
 Gently messaged via [Restart docker Windows 10 command line](https://stackoverflow.com/a/57560043/549306)
-
-Note: output redirection can be used to get a more informative output by exposing the log messages when appending '6>&1' 
-to the end of script invocation whether arguments are specified or not
 .EXAMPLE
 .\Restart-Suite.ps1 -serviceTimeout 00:00:15
 #>
