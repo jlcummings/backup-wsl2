@@ -1,21 +1,42 @@
 ﻿<#
+
 .SYNOPSIS
 This script registers a scheduled backup of a WSL2 distribution.
+
 .DESCRIPTION
 This script registers a scheduled backup of a WSL2 distribution.
+
 .EXAMPLE
-.\Register-WSL2Backup.ps1 -DestinationPath D:\backups\wsl -Distribution Ubuntu -DayOfWeek Tuesday -Time 2:30am -TimeLimit (New-TimeSpan -Hours 4)
+PS> .\Register-WSL2Backup.ps1 -DestinationPath D:\backups\wsl -Distribution Ubuntu -DaysOfWeek Tuesday -Time 2:30am -TimeLimit (New-TimeSpan -Hours 4)
+
 .EXAMPLE
-.\Register-WSL2Backup.ps1 -Distribution Ubuntu
+PS> .\Register-WSL2Backup.ps1 -Distribution Ubuntu
+
 #>
 
 param(
-    [ValidateNotNullOrEmpty()][string]$User = "$env:USERDOMAIN\$env:USERNAME",
-    [ValidateNotNullOrEmpty()][string]$DestinationPath = "$env:USERPROFILE\backup",
-    [ValidateNotNullOrEmpty()][string]$Distribution = 'Ubuntu',
-    [ValidateNotNullOrEmpty()][string]$Time = '1am',
-    [ValidateNotNullOrEmpty()][System.DayOfWeek]$DayOfWeek = 'Sunday',
-    [ValidateNotNullOrEmpty()][timespan]$TimeLimit = (New-TimeSpan -Hours 6),
+    # name of the user to run the underlying wsl --export command
+    [ValidateNotNullOrEmpty()]
+    [string]$User = "$env:USERDOMAIN\$env:USERNAME",
+    # the containing local folder for the resulting backup
+    [ValidateNotNullOrEmpty()]
+    [string]$DestinationPath = "$env:USERPROFILE\backup",
+    # name of the distribution to target for backup; must match exactly as displayed in the output of wsl -l
+    [ValidateNotNullOrEmpty()]
+    [string]$Distribution = 'Ubuntu',
+    # time of day to run the backup, formatted as <hour of the day> followed by am or pm
+    [ValidateNotNullOrEmpty()]
+    [string]$Time = '1am',
+    # days of the week to run the backup; 
+    # opinion: more than once a week in this format where an entire snapshot is captured might be excessive
+    # and instead consider a different method for daily backups that is more targeted thus smaller, quicker
+    # and easier to recover from in a given situation
+    [ValidateNotNullOrEmpty()]
+    [System.DayOfWeek[]]$DaysOfWeek = 'Sunday',
+    [ValidateNotNullOrEmpty()]
+    # time allowance for the backup task to execute; the default is probably too generous and should timeout and fail quicker
+    [timespan]$TimeLimit = (New-TimeSpan -Hours 6),
+    # path within the scheduled task list tree to the tasks for backup and any supporting tasks, like restarting docker while that continues to be useful
     [string]$TaskPath = 'Custom Maintenance'
 )
 
@@ -37,7 +58,7 @@ Log "Constructing new scheduled task parameters for $Distribution backup"
 $principle = New-ScheduledTaskPrincipal -UserId $sanitizedUser -LogonType  ServiceAccount
 $action = New-ScheduledTaskAction -Execute $cmdExecutor -Argument $command -WorkingDirectory $sanitizedDestination
 $settingsSet = New-ScheduledTaskSettingsSet -ExecutionTimeLimit $TimeLimit -WakeToRun -StartWhenAvailable
-$trigger = New-ScheduledTaskTrigger -Weekly -WeeksInterval 1 -DaysOfWeek $DayOfWeek -At $Time
+$trigger = New-ScheduledTaskTrigger -Weekly -WeeksInterval 1 -DaysOfWeek $DaysOfWeek -At $Time
 Log "New scheduled task parameters for the backup constructed"
 
 Log "Registering the new scheduled task to perform the backup"
