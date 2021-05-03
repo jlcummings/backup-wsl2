@@ -2,21 +2,27 @@
 
 .SYNOPSIS 
 The script unregisters a scheduled backup of a WSL2 distribution. 
+
 .DESCRIPTION 
 The script unregisters a scheduled backup of a WSL2 distribution. 
+
 .NOTES
-# Usage
+Usage
+
 The default distribution is 'Ubuntu'. 
 
-# Style
+Style
+
 The naming convention for the script does not follow the spelling correction
 suggestion for 'unregister' which should be deregister. The correct opposing
 analogue to register is deregister. However, the powershell
 [approved verbs](https://docs.microsoft.com/en-us/powershell/scripting/developer/cmdlet/approved-verbs-for-windows-powershell-commands?view=powershell-7.1)
 includes unregister and not deregister.
+
 .EXAMPLE
 # remove a scheduled backup that is targetting the default distribution
 PS> .\Unregister-WSL2Backup.ps1
+
 .EXAMPLE
 # remove a scheduled backup that is targetting the fedora distribution
 PS> .\Unregister-WSL2Backup.ps1 -Distribution fedora

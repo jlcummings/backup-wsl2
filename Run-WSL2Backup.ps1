@@ -1,16 +1,20 @@
 ﻿<#
+
 .SYNOPSIS
 This script performs a backup of a WSL2 distribution to a tar archive on the host system.
+
 .DESCRIPTION
 This script performs a backup of a WSL2 distribution to a tar archive on the host system.
+
 .EXAMPLE
 PS> .\Run-WSL2Backup.ps1 -Distribution Ubuntu -DestinationPath $env:USERPROFILE\backups
+
 .EXAMPLE
 PS> .\Run-WSL2Backup.ps1 -Distribution Ubuntu
 
 #>
 param(
-    # location to save the archived, snapshot
+    # path to save the archived, snapshot
     [parameter(Mandatory = $true)][string]$DestinationPath,
     # name of the WSL2 distribution as listed in the output of `wsl -l`
     [ValidateNotNullOrEmpty()][string]$Distribution = 'Ubuntu'
