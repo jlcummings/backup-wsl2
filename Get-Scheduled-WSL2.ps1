@@ -1,22 +1,22 @@
 ﻿<#
 
 .SYNOPSIS 
-The script gets all scheduled WSL2 backup tasks the current user
+The script gets all scheduled WSL2 maintenance tasks the current user
 has permission to view that match the given distribution.
 
 .DESCRIPTION 
-The script gets all scheduled WSL2 backup tasks the current user
+The script gets all scheduled WSL2 tasks the current user
 has permission to view that match the given distribution. By default it matches
-all WSL2 backup tasks that contain 'WSL2 Backup of *' and all 'Restart Docker'
+all WSL2 tasks that contain 'WSL2' and all 'Restart Docker'
 tasks.
 
 .EXAMPLE 
-# list all task that are targeting any distribution (default distribution is '*' 
-# to get all WSL2 distributions registered to the executing user)
-PS> .\Get-WSL2Backup.ps1 -Distribution *
+# list all WSL2 tasks that are targeting any distribution registered to the 
+# executing user
+PS> .\Get-Scheduled-WSL2.ps1
 .EXAMPLE
 # list any task that is targeting only the distribution called 'Ubuntu'
-PS> .\Get-WSL2Backup.ps1 -Distribution Ubuntu
+PS> .\Get-Scheduled-WSL2.ps1 -Distribution Ubuntu
 
 #>
 param (
