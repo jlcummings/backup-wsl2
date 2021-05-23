@@ -18,7 +18,7 @@ This set of [Powershell](https://docs.microsoft.com/en-us/powershell/) scripts p
 1. Powershell (probably a fairly recent version). v7.1 is the version in use during development (and 'production' for that matter).
 2. Expectation of Docker Desktop (so by extension, probably a fairly recent version of Windows 10, and in development 20H2 is the release in use).
 3. Access to the administrative, elevated terminal.
-4. A complete copy of these scripts (<https://github.com/jlcummings/wsl2-backup>)
+4. A complete copy of these scripts (<https://github.com/jlcummings/backup-wsl2>)
 5. A little powershell knowledge when my default configuration by convention (aka hardcoded, naive nonsense) blows up on you it can be remedied. Sorry, truth.
 
 ## Notes
