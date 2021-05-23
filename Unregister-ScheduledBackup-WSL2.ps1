@@ -21,11 +21,11 @@ includes unregister and not deregister.
 
 .EXAMPLE
 # remove a scheduled backup that is targetting the default distribution
-PS> .\Unregister-WSL2Backup.ps1
+PS> .\Unregister-ScheduledBackup-WSL2.ps1
 
 .EXAMPLE
 # remove a scheduled backup that is targetting the fedora distribution
-PS> .\Unregister-WSL2Backup.ps1 -Distribution fedora
+PS> .\Unregister-ScheduledBackup-WSL2.ps1 -Distribution fedora
 
 #>
 

@@ -7,10 +7,10 @@ This script registers a scheduled backup of a WSL2 distribution.
 This script registers a scheduled backup of a WSL2 distribution.
 
 .EXAMPLE
-PS> .\Register-WSL2Backup.ps1 -DestinationPath D:\backups\wsl -Distribution Ubuntu -DaysOfWeek Tuesday -Time 2:30am -TimeLimit (New-TimeSpan -Hours 4)
+PS> .\Register-ScheduledBackup-WSL2.ps1 -DestinationPath D:\backups\wsl -Distribution Ubuntu -DaysOfWeek Tuesday -Time 2:30am -TimeLimit (New-TimeSpan -Hours 4)
 
 .EXAMPLE
-PS> .\Register-WSL2Backup.ps1 -Distribution Ubuntu
+PS> .\Register-ScheduledBackup-WSL2.ps1 -Distribution Ubuntu
 
 #>
 
@@ -50,7 +50,7 @@ $sanitizedDestination = [regex]::Escape($DestinationPath)
 $taskName = "WSL2 $Distribution backup"
 $taskDescription = "$taskName archived at or about $Time"
 
-$command = "-NoProfile -file $PSScriptRoot\Run-WSL2Backup.ps1 -Distribution $Distribution -DestinationPath $sanitizedDestination"
+$command = "-NoProfile -file $PSScriptRoot\Backup-WSL2.ps1 -Distribution $Distribution -DestinationPath $sanitizedDestination"
 $cmdExecutor = (Get-Command 'powershell').Definition
 Log "Done configuring"
 

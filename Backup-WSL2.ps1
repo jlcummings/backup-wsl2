@@ -7,10 +7,10 @@ This script performs a backup of a WSL2 distribution to a tar archive on the hos
 This script performs a backup of a WSL2 distribution to a tar archive on the host system.
 
 .EXAMPLE
-PS> .\Run-WSL2Backup.ps1 -Distribution Ubuntu -DestinationPath $env:USERPROFILE\backups
+PS> .\Backup-WSL2.ps1 -Distribution Ubuntu -DestinationPath $env:USERPROFILE\backups
 
 .EXAMPLE
-PS> .\Run-WSL2Backup.ps1 -Distribution Ubuntu
+PS> .\Backup-WSL2.ps1 -Distribution Ubuntu
 
 #>
 param(

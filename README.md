@@ -27,37 +27,37 @@ This set of [Powershell](https://docs.microsoft.com/en-us/powershell/) scripts p
 
 A few notes on configurable conventions employed within the scripts:
 
-- Internally, `wsl --export ...` is executed as the current user who runs the backup script (eg: `$env:USERDOMAIN\$env:USERNAME`); however, given enough permissions, the backup can be configured to run as any other user. This is specified adding the `-User ...` option of the registration script: `.\Register-WSL2Backup.ps1 -User computer-alpha\tom`
-- The resulting backup from the internal `wsl --export ...` command is saved to a subdirectory of the user who ran the script (eg: `$env:USERPROFILE\backup`); however, specifying the `-Destination ...` parameter with the registration script will allow that to be changed for scheduled backups. Likewise, if you want to perform an ad-hoc backup by executing the the `.\Run-WSL2Backup.ps1` script directly, the `-DestinationPath ...` option will allow specifying the saved backup location. An example of the later is: `.\Run-WSL2Backup.ps1 -DestinationPath D:\hot-disk\backups\wsl2\ubuntu`
+- Internally, `wsl --export ...` is executed as the current user who runs the backup script (eg: `$env:USERDOMAIN\$env:USERNAME`); however, given enough permissions, the backup can be configured to run as any other user. This is specified adding the `-User ...` option of the registration script: `.\Register-ScheduledBackup-WSL2.ps1 -User computer-alpha\tom`
+- The resulting backup from the internal `wsl --export ...` command is saved to a subdirectory of the user who ran the script (eg: `$env:USERPROFILE\backup`); however, specifying the `-DestinationPath ...` parameter with the registration script will allow that to be changed for scheduled backups. Likewise, if you want to perform an ad-hoc backup by executing the the `.\Backup-WSL2.ps1` script directly, the `-DestinationPath ...` option will allow specifying the saved backup location. An example of the later is: `.\Backup-WSL2.ps1 -DestinationPath D:\hot-disk\backups\wsl2\ubuntu`
 - The default target distribution is specified as `Ubuntu`; but specifying some other installed distribution is perfectly fine. During registration, unregistering, or an ad-hoc backup, add the `-Distribution ...` option to the respective script.
-- The default period to run the backup and restart tasks is set to on or after `1AM` locally on `Sunday`. These can be changed manually in the task scheduler of course, or by specifying the necessary options of `-Time ...` and `-DayOfWeek ...` during registration. Scheduled time is in the form of HH:mm with an 'AM' or 'PM' indicator immediately following. The day of the week is a string matching the system names for the days of the week.
-- Output redirection can be used to get a more verbose output by exposing the log messages (which are typically 'Information' output stream tagged) to the success output stream when appending '6>&1' to the end of an ad-hoc script invocation. More information on redirection can be found in the Microsoft documentation
-  [about redirection](https://docs.microsoft.com/en-us/powershell/module/microsoft.powershell.core/about/about_redirection?view=powershell-7.1)
+- The default period to run the backup and restart tasks is set to on or after `1AM` locally only on `Sunday`. These can be changed manually in the task scheduler of course, or by specifying the necessary options of `-Time ...` and `-DaysOfWeek ...` during registration. Scheduled time is in the form of HH:mm with an 'AM' or 'PM' indicator immediately following. The day of the week is an of strings matching the system names for the days of the week.
+- Output redirection can be used to get a more verbose output by exposing the log messages (which are typically 'Information' output stream tagged) to the success output stream when appending '6>&1' to the end of an ad-hoc script invocation. More information on redirection can be found in the Microsoft documentation.  
+  [about redirection](https://docs.microsoft.com/en-us/powershell/module/microsoft.powershell.core/about/about_redirection?view=powershell-7.1).  Otherwise logging to a file is certainly feasible if persistent logs are important by modifying or extending the logging script (`.\Log-Message.ps1`)
 
 ### Purpose and how to use each script in the default use-case
 
 #### Register the scheduled backup tasks
 
-- Script: `.\Register-WSL2Backup.ps1`
+- Script: `.\Register-ScheduledBackup-WSL2.ps1`
 - Returns: On success, a textual table summary of associated, registered task paths, task names, and status.
 - On Error: A message when a task or associated task is not registered given whatever parameters are specified, if any
 
 #### Get the scheduled backup tasks
 
-- Script: `.\Get-WSL2Backup.ps1`
+- Script: `.\Get-Scheduled-WSL2.ps1`
 - Returns: A list of tasks registered to a given set of service-identifiers (eg, default is `backup` and `docker`).
 - On Error: Typically, it will error only if no tasks are found using the given service identifiers.
 
 #### Unregister the scheduled backup tasks
 
-- Script: `.\Unregister-WSL2Backup.ps1`
+- Script: `.\Unregister-ScheduledBackup-WSL2.ps1`
 - Returns: A prompt for confirmation that you want each task removed from the scheduler.
-- On Error: Failure messages when unable to remove expected scheduled tasks associated with the service identifier (eg: `backup`). Typically, failure occurs if the service identifier does not match the current configuration or a lack of adequate, elevated permissions to remove a specific task by the executing user.
+- On Error: Failure messages when unable to remove expected scheduled tasks associated with the service identifier or distribution. Typically, failure occurs if the service identifier does not match the current configuration or a lack of adequate, elevated permissions to remove a specific task by the executing user.
 
 #### Ad-hoc execution of the backup script
 
-- Script: `.\Run-WSL2Backup.ps1`
-- Verbose Output Example: `.\Run-WSL2Backup.ps1 6>&1`
+- Script: `.\Backup-WSL2.ps1`
+- Verbose Output Example: `.\Backup-WSL2.ps1 6>&1`
 - Returns: A tar archive in the `$env:USERPROFILE\backup` directory based on a snapshot of the `Ubuntu` WSL2 distribution for the executing user. Specifying the `-Distribution ...` option during registration or during this ad-hoc backup will allow you to target a distribution other than the conventional default, Ubuntu. The file name for the archive by default uses a format of `<distribution>-<date of execution>.tar`. For example: `Ubuntu-20210426.tar`
 - On Error: ...
 
